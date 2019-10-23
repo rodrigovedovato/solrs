@@ -364,9 +364,11 @@ class FastestServerLB[F[_]](override val solrServers: SolrServers,
         val durationByServer: Map[SolrServer, Long] = stats.map(s => s.solrServer -> s.predictDuration(TestQueryClass))(breakOut)
         val average = durationByServer.values.sum / durationByServer.size
         val serverFilter = filterFastServers(average)
+
         val fastServers: Set[SolrServerId] = durationByServer.collect {
           case (server, duration) if serverFilter(server, duration) => server.id
         }(breakOut)
+
         if(fastServers != fastServersByCollection(collection)) {
           onBeforeFastServersChanged(collection, fastServers, durationByServer, average)
           fastServersByCollection += (collection -> fastServers)

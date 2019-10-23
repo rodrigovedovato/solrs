@@ -637,7 +637,7 @@ class AsyncSolrClient[F[_]] protected (private[solrs] val loadBalancer: LoadBala
       }.getOrElse {
         // POST/PUT with FORM data
         val req = if (r.getMethod == POST) httpClient.preparePost(url) else httpClient.preparePut(url)
-        req.setFormParams(wparams.getMap.asScala.mapValues(asList[String](_: _*)).asJava)
+        req.setFormParams(MapConverter.convert(wparams.getMap))
       }
     }
     val request = requestBuilder.addHeader("User-Agent", agent).build()
