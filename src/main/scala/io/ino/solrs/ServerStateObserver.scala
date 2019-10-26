@@ -66,7 +66,7 @@ class PingStatusObserver[F[_]](solrServers: SolrServers, httpClient: AsyncHttpCl
       })
       promise.future
     }
-    FutureFactory.sequence(futures).map(_ => Unit)
+    FutureFactory.sequence(futures).map(_ => ())
   }
 
   private def updateServerStatus(server: SolrServer, response: Response, url: String): Unit = {

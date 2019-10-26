@@ -254,8 +254,8 @@ class FastestServerLB[F[_]](override val solrServers: SolrServers,
 
     // gather initial stats
     val futures = solrServers.all.filter(_.isEnabled).map { server =>
-      (1 to initialTestRuns).foldLeft(futureFactory.successful(Unit))((res, _) =>
-        res.flatMap(_ => test(server).map(_ => Unit))
+      (1 to initialTestRuns).foldLeft(futureFactory.successful(()))((res, _) =>
+        res.flatMap(_ => test(server).map(_ => ()))
       )
     }
     FutureFactory.sequence(futures).onComplete(_ =>
