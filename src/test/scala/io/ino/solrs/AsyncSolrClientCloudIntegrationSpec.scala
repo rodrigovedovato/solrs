@@ -201,8 +201,10 @@ class AsyncSolrClientCloudIntegrationSpec extends StandardFunSpec with Eventuall
       awaitAllServersBeingEnabled()
 
       val otherDocs = manyDocs.filterNot(someDocs.contains).take(42)
+
       import scala.jdk.CollectionConverters._
       solrJClient.add(collection2, otherDocs.asJavaCollection)
+
       solrJClient.commit(collection2)
       val otherDocsIds = otherDocs.map(_.getFieldValue("id").toString)
 
