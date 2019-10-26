@@ -24,7 +24,6 @@ import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.Response
 import org.slf4j.LoggerFactory
 
-import scala.collection.breakOut
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
 import scala.util.Failure
@@ -82,11 +81,11 @@ private class ZkClusterStateUpdateTF extends ThreadFactory {
 }
 
 trait StateChangeObserver {
-  def onStateChange(event: StateChange)
+  def onStateChange(event: StateChange): Unit
 }
 
 trait ServerStateChangeObservable {
-  def register(listener: StateChangeObserver)
+  def register(listener: StateChangeObserver): Unit
 }
 
 object ServerStateChangeObservable {
@@ -453,7 +452,7 @@ class ReloadingSolrServers[F[_]](url: String, extractor: Array[Byte] => IndexedS
         promise.success(response.getResponseBodyAsBytes)
         response
       }
-      override def onThrowable(t: Throwable) {
+      override def onThrowable(t: Throwable): Unit = {
         logger.error("Could not load solr server list.", t)
         promise.failure(t)
       }
